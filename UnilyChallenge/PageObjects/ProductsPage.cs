@@ -20,7 +20,7 @@ namespace UnilyChallenge.PageObjects
 
         private IWebElement FirstProduct => _driver.FindElement(By.XPath("(//div[@class='productinfo text-center'])[1]"));
         private IWebElement SecondProduct => _driver.FindElement(By.XPath("(//div[@class='productinfo text-center'])[2]"));
-        private IWebElement AddToCartButton(int productIndex) => _driver.FindElement(By.XPath($"(//a[text()[contains(.,'Add to cart')]])[{productIndex}]"));
+        private IWebElement AddToCartButton(int productIndex) => _driver.FindElement(By.XPath($"(//a[@data-product-id='{productIndex}'])"));
         private IWebElement ContinueShoppingButton => _driver.FindElement(By.XPath("//button[text()='Continue Shopping']"));
         private IWebElement ViewCartButton => _driver.FindElement(By.XPath("//a[@href='/view_cart']"));
 
@@ -77,7 +77,7 @@ namespace UnilyChallenge.PageObjects
             IWebElement addToCartButton = AddToCartButton(productIndex);
             _wait.Until(ExpectedConditions.ElementToBeClickable(addToCartButton));
             ScrollToElement(addToCartButton);
-            addToCartButton.Click();
+            ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].click();", addToCartButton);
         }
 
         public void ClickContinueShopping()
